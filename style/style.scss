@@ -1,0 +1,18 @@
+@import 'reset';
+
+body, canvas {
+  background-color: #111111;
+}
+
+canvas {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
+.cursor-grabbing {
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+  cursor: grabbing;
+}
