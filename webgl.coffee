@@ -3,7 +3,7 @@ scene =
 camera =
 renderer =
 stats =
-null
+  null
 
 init = ->
   scene = new THREE.Scene()
@@ -12,13 +12,13 @@ init = ->
   camera.position.z = 1000
   scene.add camera
 
-  geometry = new THREE.CubeGeometry 300, 300, 300
-  material = new THREE.MeshBasicMaterial {color: 0xff0000, wireframe: true}
+  geometry = new THREE.CubeGeometry 200, 300, 100
+  material = new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true
 
   mesh = new THREE.Mesh geometry, material
   scene.add mesh
 
-  renderer = new THREE.WebGLRenderer {antialias: true}
+  renderer = new THREE.WebGLRenderer antialias: true
   renderer.setSize window.innerWidth, window.innerHeight
 
   document.body.appendChild renderer.domElement
@@ -32,8 +32,8 @@ animate = ->
   stats.end()
 
 render = ->
-  mesh.rotation.x += 0.01
-  mesh.rotation.y += 0.02
+  mesh.rotation.x += 0.005
+  mesh.rotation.y += 0.01
 
   renderer.render scene, camera
 
@@ -47,5 +47,4 @@ setStats = ->
   document.body.appendChild stats.domElement
 
 init()
-# setStats()
 animate()

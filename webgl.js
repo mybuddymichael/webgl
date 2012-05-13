@@ -9,7 +9,7 @@
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
     camera.position.z = 1000;
     scene.add(camera);
-    geometry = new THREE.CubeGeometry(300, 300, 300);
+    geometry = new THREE.CubeGeometry(200, 300, 100);
     material = new THREE.MeshBasicMaterial({
       color: 0xff0000,
       wireframe: true
@@ -32,8 +32,8 @@
   };
 
   render = function() {
-    mesh.rotation.x += 0.01;
-    mesh.rotation.y += 0.02;
+    mesh.rotation.x += 0.005;
+    mesh.rotation.y += 0.01;
     return renderer.render(scene, camera);
   };
 
