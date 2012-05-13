@@ -1,12 +1,24 @@
 (function() {
-  var animate, camera, init, mesh, render, renderer, scene, setStats, stats;
+  var $, animate, camera, height, init, mesh, render, renderer, root, scene, setStats, stats, width;
+
+  root = this;
 
   mesh = scene = camera = renderer = stats = null;
+
+  $ = root.Zepto;
+
+  height = $(function() {
+    return $(window).height();
+  });
+
+  width = $(function() {
+    return $(window).width();
+  });
 
   init = function() {
     var geometry, material;
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+    camera = new THREE.PerspectiveCamera(75, 1, 1, 10000);
     camera.position.z = 1000;
     scene.add(camera);
     geometry = new THREE.CubeGeometry(200, 300, 100);
@@ -19,8 +31,10 @@
     renderer = new THREE.WebGLRenderer({
       antialias: true
     });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+    renderer.setSize(width, height);
+    $(function() {
+      return $('body').append(renderer.domElement);
+    });
     return setStats();
   };
 
@@ -43,7 +57,9 @@
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.left = '0px';
     stats.domElement.style.top = '0px';
-    return document.body.appendChild(stats.domElement);
+    return $(function() {
+      return $('body').append(stats.domElement);
+    });
   };
 
   init();

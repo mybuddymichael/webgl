@@ -1,3 +1,5 @@
+root = this
+
 mesh =
 scene =
 camera =
@@ -5,10 +7,13 @@ renderer =
 stats =
   null
 
+$ = root.Zepto
+height = $ -> $(window).height()
+width = $ -> $(window).width()
+
 init = ->
   scene = new THREE.Scene()
-  camera = new THREE.PerspectiveCamera 75,
-      window.innerWidth / window.innerHeight, 1, 10000
+  camera = new THREE.PerspectiveCamera 75, 1, 1, 10000
   camera.position.z = 1000
   scene.add camera
 
@@ -19,9 +24,9 @@ init = ->
   scene.add mesh
 
   renderer = new THREE.WebGLRenderer antialias: true
-  renderer.setSize window.innerWidth, window.innerHeight
+  renderer.setSize width, height
 
-  document.body.appendChild renderer.domElement
+  $ -> $('body').append renderer.domElement
 
   setStats()
 
@@ -44,7 +49,7 @@ setStats = ->
   stats.domElement.style.left = '0px'
   stats.domElement.style.top = '0px'
 
-  document.body.appendChild stats.domElement
+  $ -> $('body').append stats.domElement
 
 init()
 animate()
