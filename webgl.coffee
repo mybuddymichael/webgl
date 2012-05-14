@@ -1,55 +1,62 @@
 root = this
 
-mesh =
-scene =
-camera =
-renderer =
-stats =
-  null
+gld = root.gld = {}
 
 $ = root.Zepto
-height = $ -> $(window).height()
-width = $ -> $(window).width()
+
+$ ->
+  init()
+  statsInit()
+  animate()
 
 init = ->
-  scene = new THREE.Scene()
-  camera = new THREE.PerspectiveCamera 75, 1, 1, 10000
-  camera.position.z = 1000
-  scene.add camera
+  gld.scene = new THREE.Scene()
+  gld.camera = new THREE.PerspectiveCamera 75,
+    $(window).width()/$(window).height(), 1, 10000
 
-  geometry = new THREE.CubeGeometry 200, 300, 100
-  material = new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true
+  gld.camera.position.z = 1000
 
-  mesh = new THREE.Mesh geometry, material
-  scene.add mesh
+  gld.scene.add gld.camera
 
-  renderer = new THREE.WebGLRenderer antialias: true
-  renderer.setSize width, height
+  gld.cube = new Cube x: 100, y: 200, z: 300, color: 0xffffff, wireframe: true
 
-  $ -> $('body').append renderer.domElement
+  gld.scene.add gld.cube.mesh
 
-  setStats()
+  gld.renderer = new THREE.WebGLRenderer antialias: true
+  gld.renderer.setSize $(window).width(), $(window).height()
+
+  $('body').append gld.renderer.domElement
 
 animate = ->
-  stats.begin()
+  gld.stats.begin()
   requestAnimationFrame animate
   render()
-  stats.end()
+  gld.stats.end()
 
 render = ->
-  mesh.rotation.x += 0.005
-  mesh.rotation.y += 0.01
+  gld.cube.mesh.rotation.x += 0.005
+  gld.cube.mesh.rotation.y += 0.01
 
-  renderer.render scene, camera
+  gld.renderer.render gld.scene, gld.camera
 
-setStats = ->
-  stats = new Stats()
+statsInit = ->
+  stats = gld.stats = new Stats()
   stats.setMode 0
   stats.domElement.style.position = 'absolute'
   stats.domElement.style.left = '0px'
   stats.domElement.style.top = '0px'
 
-  $ -> $('body').append stats.domElement
+  $('body').append stats.domElement
 
-init()
-animate()
+class Cube
+  # params - An Object containing parameters passed to new()
+  #          x     - The width of the cube.
+  #          y     - The height of the cube.
+  #          z     - The depth of the cube.
+  #          color - The hex number color.
+  constructor: (params) ->
+    @geometry = new THREE.CubeGeometry params.x, params.y, params.z
+    @material = new THREE.MeshBasicMaterial
+        color: params.color, wireframe: params.wireframe
+    @mesh = new THREE.Mesh @geometry, @material
+

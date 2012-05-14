@@ -1,69 +1,76 @@
 (function() {
-  var $, animate, camera, height, init, mesh, render, renderer, root, scene, setStats, stats, width;
+  var $, Cube, animate, gld, init, render, root, statsInit;
 
   root = this;
 
-  mesh = scene = camera = renderer = stats = null;
+  gld = root.gld = {};
 
   $ = root.Zepto;
 
-  height = $(function() {
-    return $(window).height();
-  });
-
-  width = $(function() {
-    return $(window).width();
+  $(function() {
+    init();
+    statsInit();
+    return animate();
   });
 
   init = function() {
-    var geometry, material;
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, 1, 1, 10000);
-    camera.position.z = 1000;
-    scene.add(camera);
-    geometry = new THREE.CubeGeometry(200, 300, 100);
-    material = new THREE.MeshBasicMaterial({
-      color: 0xff0000,
+    gld.scene = new THREE.Scene();
+    gld.camera = new THREE.PerspectiveCamera(75, $(window).width() / $(window).height(), 1, 10000);
+    gld.camera.position.z = 1000;
+    gld.scene.add(gld.camera);
+    gld.cube = new Cube({
+      x: 100,
+      y: 200,
+      z: 300,
+      color: 0xffffff,
       wireframe: true
     });
-    mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
-    renderer = new THREE.WebGLRenderer({
+    gld.scene.add(gld.cube.mesh);
+    gld.renderer = new THREE.WebGLRenderer({
       antialias: true
     });
-    renderer.setSize(width, height);
-    $(function() {
-      return $('body').append(renderer.domElement);
-    });
-    return setStats();
+    gld.renderer.setSize($(window).width(), $(window).height());
+    return $('body').append(gld.renderer.domElement);
   };
 
   animate = function() {
-    stats.begin();
+    gld.stats.begin();
     requestAnimationFrame(animate);
     render();
-    return stats.end();
+    return gld.stats.end();
   };
 
   render = function() {
-    mesh.rotation.x += 0.005;
-    mesh.rotation.y += 0.01;
-    return renderer.render(scene, camera);
+    gld.cube.mesh.rotation.x += 0.005;
+    gld.cube.mesh.rotation.y += 0.01;
+    return gld.renderer.render(gld.scene, gld.camera);
   };
 
-  setStats = function() {
-    stats = new Stats();
+  statsInit = function() {
+    var stats;
+    stats = gld.stats = new Stats();
     stats.setMode(0);
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.left = '0px';
     stats.domElement.style.top = '0px';
-    return $(function() {
-      return $('body').append(stats.domElement);
-    });
+    return $('body').append(stats.domElement);
   };
 
-  init();
+  Cube = (function() {
 
-  animate();
+    Cube.name = 'Cube';
+
+    function Cube(params) {
+      this.geometry = new THREE.CubeGeometry(params.x, params.y, params.z);
+      this.material = new THREE.MeshBasicMaterial({
+        color: params.color,
+        wireframe: params.wireframe
+      });
+      this.mesh = new THREE.Mesh(this.geometry, this.material);
+    }
+
+    return Cube;
+
+  })();
 
 }).call(this);
