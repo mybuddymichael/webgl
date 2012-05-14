@@ -50,13 +50,15 @@ statsInit = ->
 
 class Cube
   # params - An Object containing parameters passed to new()
-  #          x     - The width of the cube.
-  #          y     - The height of the cube.
-  #          z     - The depth of the cube.
+  #          x - The width of the cube.
+  #          y - The height of the cube.
+  #          z - The depth of the cube.
   #          color - The hex number color.
+  #          wireframe - A boolean for whether to draw it as a
+  #            wireframe.
   constructor: (params) ->
     @geometry = new THREE.CubeGeometry params.x, params.y, params.z
     @material = new THREE.MeshBasicMaterial
-        color: params.color, wireframe: params.wireframe
+      color: params.color, wireframe: params.wireframe
     @mesh = new THREE.Mesh @geometry, @material
 
